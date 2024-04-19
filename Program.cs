@@ -6,7 +6,7 @@ namespace Calculator
     {
         public static double DoCalc(double num1, double num2, char op)
         {
-            double result = 0;
+            double result = double.NaN;
             switch (op)
             {
                 case '+':
@@ -24,7 +24,7 @@ namespace Calculator
                         Console.WriteLine("You can't divide by 0.");
                         return 0;
                     }
-                    result = num1 / num2;
+                        result = num1 / num2;
                     break;
                 default:
                     Console.WriteLine("Unsupported operation.");
@@ -64,12 +64,13 @@ namespace Calculator
 
                     result = Calculator.DoCalc(num1, num2, op);
 
-                    Console.WriteLine($"Result: {input}={result}\n");
+                    Console.WriteLine($"Result: {input} = {result}\n");
                     Console.WriteLine("Press \"Enter\" to start new operation or type \"q\" to close the app:");
                 }
                 else
                 {
-                    Console.WriteLine("No valid operator found (\"+\", \"-\", \"*\", \"/\").");
+                    Console.WriteLine("No valid operator found (\"+\", \"-\", \"*\", \"/\").\n");
+                    Console.WriteLine("Press \"Enter\" to start new operation or type \"q\" to close the app:");
                 }
 
                 if (Console.ReadLine() == "q")
