@@ -19,12 +19,14 @@ namespace Calculator
                     result = num1 * num2;
                     break;
                 case '/':
-                    if (num2 == 0)
+                    if (num2 != 0)
+                    {
+                        result = num1 / num2;
+                    }
+                    else
                     {
                         Console.WriteLine("You can't divide by 0.");
-                        return 0;
                     }
-                        result = num1 / num2;
                     break;
                 default:
                     Console.WriteLine("Unsupported operation.");
@@ -40,46 +42,69 @@ namespace Calculator
         {
             bool endApp = false;
 
-            Console.WriteLine("Console Calculator");
-            Console.WriteLine("------------------");
+            Console.WriteLine("*--------------------*");
+            Console.WriteLine("* Console Calculator *");
+            Console.WriteLine("*--------------------*");
+
+            char i = Char.MinValue;
+            string input = "";
 
             while (!endApp)
             {
-                Console.Write("Type a desired operation: ");
-                string input = Console.ReadLine();
+                Console.Write("\nType a desired operation: ");
 
-                char[] operators = { '+', '-', '*', '/' };
-                char op = ' ';
-                double num1;
-                double num2;
-                double result = 0;
-
-                var opIndex = input.IndexOfAny(operators);
-                if (opIndex != -1)
+                do
                 {
-                    op = Convert.ToChar(input.Substring(opIndex, 1));
+                    i = Console.ReadKey().KeyChar;
 
-                    num1 = Convert.ToDouble(input.Substring(0, opIndex));
-                    num2 = Convert.ToDouble(input.Substring(opIndex + 1));
+                    if (i == '=')
+                    {
+                        break;
+                    }
+                    else if (i == 'q')
+                    {
+                        endApp = true;
+                        break;
+                    }
 
-                    result = Calculator.DoCalc(num1, num2, op);
+                    input += i;
+                } while (true);
 
-                    Console.WriteLine($"Result: {input} = {result}\n");
-                    Console.WriteLine("Press \"Enter\" to start new operation or type \"q\" to close the app:");
-                }
-                else
+                if (i == '=')
                 {
-                    Console.WriteLine("No valid operator found (\"+\", \"-\", \"*\", \"/\").\n");
-                    Console.WriteLine("Press \"Enter\" to start new operation or type \"q\" to close the app:");
+                    ProcessOperation(input);
+                    input = "";
+                }
+                else if (endApp)
+                {
+                    break;
                 }
 
-                if (Console.ReadLine() == "q")
-                {
-                    endApp = true;
-                }
+                Console.WriteLine("\nPress \"Enter\" to start new operation or press \"q\" to close the app:");
             }
-            return;
 
+        }
+
+        static void ProcessOperation(string input)
+        {
+            char[] operators = { '+', '-', '*', '/' };
+            var opIndex = input.IndexOfAny(operators);
+
+            if (opIndex != -1)
+            {
+                char op = Convert.ToChar(input.Substring(opIndex, 1));
+
+                double num1 = Convert.ToDouble(input.Substring(0, opIndex));
+                double num2 = Convert.ToDouble(input.Substring(opIndex + 1));
+
+                double result = Calculator.DoCalc(num1, num2, op);
+
+                Console.Write(result);
+            }
+            else
+            {
+                Console.WriteLine("No valid operator found (\"+\", \"-\", \"*\", \"/\").");
+            }
         }
     }
 }
