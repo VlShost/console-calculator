@@ -25,11 +25,12 @@ namespace Calculator
                     }
                     else
                     {
-                        Console.WriteLine("You can't divide by 0.");
+                        Console.WriteLine("\nYou can't divide by 0.");
+                        result = 0;
                     }
                     break;
                 default:
-                    Console.WriteLine("Unsupported operation.");
+                    Console.WriteLine("\nUnsupported operation.");
                     break;
             }
             return result;
@@ -103,7 +104,7 @@ namespace Calculator
             }
             else
             {
-                Console.WriteLine("No valid operator found (\"+\", \"-\", \"*\", \"/\").");
+                Console.WriteLine("\nNo valid operator found (\"+\", \"-\", \"*\", \"/\").");
             }
         }
     }
