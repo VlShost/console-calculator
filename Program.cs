@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Calculator
+﻿namespace Calculator
 {
     class Program
     {
@@ -53,32 +51,39 @@ namespace Calculator
 
         static void ProcessOperation(string input)
         {
+            var isValidOperator = false;
+
             foreach (char symbol in input)
             {
-                foreach (Operators op in Enum.GetValues(typeof(Operators)))
+                try
                 {
-                    if ((char)op == symbol)
+                    Operators op = OperatorsParser.ParseOperator(symbol);
+                    int opIndex = input.IndexOf(symbol);
+
+                    if (opIndex != -1)
                     {
-                        char operatorSymbol = (char)op;
-                        int opIndex = input.IndexOf(operatorSymbol);
-
-
-                        if (opIndex != -1)
+                        if (double.TryParse(input.Substring(0, opIndex), out double num1) &&
+                        double.TryParse(input.Substring(opIndex + 1), out double num2))
                         {
-                            double num1 = Convert.ToDouble(input.Substring(0, opIndex));
-                            double num2 = Convert.ToDouble(input.Substring(opIndex + 1));
-
                             double result = Calculator.DoCalc(num1, num2, op);
-
                             Console.Write(result);
                         }
                         else
                         {
-                            Console.WriteLine("\nNo valid operator found (\"+\", \"-\", \"*\", \"/\").");
+                            Console.WriteLine("\nInvalid numbers format or words in input.");
                         }
-                        break;
                     }
+
+                    isValidOperator = true;
+                    break;
                 }
+                catch(ArgumentException)
+                {
+                } 
+            }
+            if (!isValidOperator)
+            {
+                Console.WriteLine("\nNo valid operator found (\"+\", \"-\", \"*\", \"/\").");
             }
         }
     }
