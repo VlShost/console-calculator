@@ -1,42 +1,5 @@
-﻿using System;
-
-namespace Calculator
+﻿namespace Calculator
 {
-    class Calculator
-    {
-        public static double DoCalc(double num1, double num2, char op)
-        {
-            double result = double.NaN;
-            switch (op)
-            {
-                case '+':
-                    result = num1 + num2;
-                    break;
-                case '-':
-                    result = num1 - num2;
-                    break;
-                case '*':
-                    result = num1 * num2;
-                    break;
-                case '/':
-                    if (num2 != 0)
-                    {
-                        result = num1 / num2;
-                    }
-                    else
-                    {
-                        Console.WriteLine("\nYou can't divide by 0.");
-                        result = 0;
-                    }
-                    break;
-                default:
-                    Console.WriteLine("\nUnsupported operation.");
-                    break;
-            }
-            return result;
-        }
-    }
-
     class Program
     {
         static void Main(string[] args)
@@ -88,21 +51,37 @@ namespace Calculator
 
         static void ProcessOperation(string input)
         {
-            char[] operators = { '+', '-', '*', '/' };
-            var opIndex = input.IndexOfAny(operators);
+            var isValidOperator = false;
 
-            if (opIndex != -1)
+            foreach (char symbol in input)
             {
-                char op = Convert.ToChar(input.Substring(opIndex, 1));
+                try
+                {
+                    Operators op = OperatorsParser.ParseOperator(symbol);
+                    int opIndex = input.IndexOf(symbol);
 
-                double num1 = Convert.ToDouble(input.Substring(0, opIndex));
-                double num2 = Convert.ToDouble(input.Substring(opIndex + 1));
+                    if (opIndex != -1)
+                    {
+                        if (double.TryParse(input.Substring(0, opIndex), out double num1) &&
+                        double.TryParse(input.Substring(opIndex + 1), out double num2))
+                        {
+                            double result = Calculator.DoCalc(num1, num2, op);
+                            Console.Write(result);
+                        }
+                        else
+                        {
+                            Console.WriteLine("\nInvalid numbers format or words in input.");
+                        }
+                    }
 
-                double result = Calculator.DoCalc(num1, num2, op);
-
-                Console.Write(result);
+                    isValidOperator = true;
+                    break;
+                }
+                catch(ArgumentException)
+                {
+                } 
             }
-            else
+            if (!isValidOperator)
             {
                 Console.WriteLine("\nNo valid operator found (\"+\", \"-\", \"*\", \"/\").");
             }
